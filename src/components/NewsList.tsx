@@ -1,28 +1,38 @@
 import { useState, useEffect } from "react";
 import styles from "./NewsList.module.css";
 import NewsItem from "./NewsItem";
+import type { Article } from "./NewsItem";
 import axios from "axios";
 
-export default function NewsList() {
-  const [articles, setArticles] = useState(null);
+
+type NewsListProps = {
+  category: string;
+};
+
+export default function NewsList({ category }: NewsListProps) {
+  const [articles, setArticles] = useState<Article[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const query =
+          category === "all" ? "" : `&category=${category}`;
+
         const response = await axios.get(
-          // TODO API Key 입력
-          "https://newsapi.org/v2/top-headlines?country=us&apiKey={API KEY}"
+          `https://newsapi.org/v2/top-headlines?country=us${query}&apiKey=ad4f75ab641d4ab7bd295234efd94073`
         );
+
         setArticles(response.data.articles);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
       setLoading(false);
     };
+
     fetchData();
-  }, []);
+  }, [category]);
 
   if (loading) {
     return <div className={styles.newsListBlock}>Loading...</div>;

@@ -1,21 +1,20 @@
 import styles from "./NewsItem.module.css";
 
-export default function NewsItem({
-  article,
-}: {
-  article: {
-    title: string;
-    description: string;
-    url: string;
-    urlToImage: string;
-  };
-}) {
+export type Article = {
+  title: string;
+  description: string | null;
+  url: string;
+  urlToImage: string | null;
+};
+
+export default function NewsItem({ article }: { article: Article }) {
   const { title, description, url, urlToImage } = article;
+
   return (
     <div className={styles.newsItem}>
       {urlToImage && (
         <div className={styles.thumbnail}>
-          <a href={url} target="_blank" rel="noopener noreferrrer">
+          <a href={url} target="_blank" rel="noopener noreferrer">
             <img src={urlToImage} alt="thumbnail" />
           </a>
         </div>
